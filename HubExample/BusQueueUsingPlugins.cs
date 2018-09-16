@@ -4,51 +4,46 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Management;
+using ServiceBusSample.Plugins;
 
 namespace ServiceBusSample
 {
-    public class BusSessionQueue
+    public class BusQueueUsingPlugins
     {
-        // standard
         private const string ServiceBusConnectionString =
-            "Endpoint=sb://standardbus1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;TransportType=Amqp;SharedAccessKey=JBKJmPMvCGFz4sz86Xz2InIZvypSEfGOMh7W/6XZqdA=";
+            "Endpoint=sb://busexample1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=LIdsRM4kAfDsj1Bu6RmOonkW5kJrfGYv0g9dwL1NCEo=";
 
-        private const string QueueName = "squeue";
+        private const string QueueName = "queueExample";
         private static IQueueClient queueClient;
 
         internal async Task Invoke()
         {
             const int numberOfMessages = 10;
             queueClient =
-                new QueueClient(ServiceBusConnectionString, QueueName, ReceiveMode.ReceiveAndDelete); // Default Peek Lock
+                new QueueClient(ServiceBusConnectionString, QueueName, ReceiveMode.PeekLock); // Default Peek Lock
 
-            //Send messages.
-            await SendMessagesAsync(numberOfMessages);
+            queueClient.RegisterPlugin(new CustomPlugin());
+
+            // Send messages.
+            // await SendMessagesAsync(numberOfMessages);
 
             RegisterOnMessageHandlerAndReceiveMessages();
 
             Console.ReadKey();
 
             await queueClient.CloseAsync();
-
         }
 
 
         private static void RegisterOnMessageHandlerAndReceiveMessages()
         {
-            queueClient.RegisterSessionHandler(ProcessMessagesAsync, new SessionHandlerOptions(ExceptionReceivedHandler)
+            var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
             {
-                //MaxConcurrentSessions = 2
-            });
-        }
+                MaxConcurrentCalls = 1,
+                AutoComplete = false
+            };
 
-        private static async Task ProcessMessagesAsync(IMessageSession session, Message message, CancellationToken cancellationToken)
-        {
-            // Process the message.
-            Console.WriteLine(
-                $"Received message: SessionId{session.SessionId} SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
-
-            await session.SetStateAsync(Encoding.UTF8.GetBytes("completed:10%;stage:stockMovement;tempOutput:foo"));
+            queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
         private static Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
@@ -62,10 +57,23 @@ namespace ServiceBusSample
             return Task.CompletedTask;
         }
 
+        private static async Task ProcessMessagesAsync(Message message, CancellationToken token)
+        {
+            // Process the message.
+            Console.WriteLine(
+                $"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
+
+            // Complete the message so that it is not received again.
+            // This can be done only if the queue Client is created in ReceiveMode.PeekLock mode (which is the default).
+            await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+        }
 
         private static async Task SendMessagesAsync(int numberOfMessagesToSend)
         {
-            var session = "1";
+            var client = new ManagementClient(ServiceBusConnectionString);
+
+            if (!await client.QueueExistsAsync(QueueName))
+                await client.CreateQueueAsync(QueueName);
 
             try
             {
@@ -74,8 +82,6 @@ namespace ServiceBusSample
                     // Create a new message to send to the queue.
                     var messageBody = $"Message {i}";
                     var message = new Message(Encoding.UTF8.GetBytes(messageBody));
-
-                    message.SessionId = session;
 
                     // Write the body of the message to the console.
                     Console.WriteLine($"Sending message: {messageBody}");
