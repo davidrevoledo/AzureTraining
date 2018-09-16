@@ -76,12 +76,16 @@ namespace ServiceBusSample
         private static async Task SendMessagesAsync(int numberOfMessagesToSend)
         {
             topicClient = new TopicClient(ServiceBusConnectionString, TopicName);
-
             var client = new ManagementClient(ServiceBusConnectionString);
+
+            //var topic = await client.GetTopicAsync(TopicName);
+            //topic.SupportOrdering = true;
+            //topic.Status = EntityStatus.ReceiveDisabled;
+
+            //await client.UpdateTopicAsync(topic);
 
             if (!await client.TopicExistsAsync(TopicName))
                 await client.CreateTopicAsync(TopicName);
-
             try
             {
                 for (var i = 0; i < numberOfMessagesToSend; i++)

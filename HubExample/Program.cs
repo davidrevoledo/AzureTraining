@@ -14,7 +14,7 @@ namespace ServiceBusSample
 
         private static async Task MainAsync()
         {
-            await new TopicSample()
+            await new BusSessionQueue()
                 .Invoke();
         }
     }
