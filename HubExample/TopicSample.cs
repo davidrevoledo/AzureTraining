@@ -35,7 +35,9 @@ namespace ServiceBusSample
             var client = new ManagementClient(ServiceBusConnectionString);
 
             if (!await client.SubscriptionExistsAsync(TopicName, SubscriptionName))
+            {
                 await client.CreateSubscriptionAsync(TopicName, SubscriptionName);
+            }
 
             subscriptionClient = new SubscriptionClient(ServiceBusConnectionString, TopicName, SubscriptionName);
 
@@ -93,6 +95,8 @@ namespace ServiceBusSample
                     // Create a new message to send to the topic.
                     var messageBody = $"Message {i}";
                     var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+                    message.UserProperties.Add("", "");
 
                     // Write the body of the message to the console.
                     Console.WriteLine($"Sending message: {messageBody}");
