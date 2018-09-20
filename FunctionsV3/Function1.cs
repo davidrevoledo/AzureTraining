@@ -1,7 +1,12 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace FunctionsV3
 {
@@ -13,6 +18,41 @@ namespace FunctionsV3
             TraceWriter log)
         {
             await starter.StartNewAsync("InvoiceProcessing", request);
+        }
+
+        [FunctionName("Request")]
+        public static async Task<HttpResponseMessage> Request([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequestMessage req, TraceWriter log)
+        {
+            var invoiceRequest = await GenerateInvoiceRequest();
+
+
+            var message = $"Your Invoice is being processed here is your reference number {invoiceRequest}";
+
+            return req.CreateResponse(HttpStatusCode.OK, message);
+        }
+
+        private static async Task<string> GenerateInvoiceRequest()
+        {
+            var invoiceRequest = Guid.NewGuid().ToString("N");
+
+            // Retrieve storage account from connection string.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse("");
+
+            // Create the queue client.
+            CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
+
+            // Retrieve a reference to a queue.
+            CloudQueue queue = queueClient.GetQueueReference("invoice-requests");
+
+            // Create the queue if it doesn't already exist.
+            await queue.CreateIfNotExistsAsync();
+
+            // Create a message and add it to the queue.
+            CloudQueueMessage message = new CloudQueueMessage(invoiceRequest);
+
+            await queue.AddMessageAsync(message);
+
+            return invoiceRequest;
         }
 
         [FunctionName("InvoiceProcessing")]
