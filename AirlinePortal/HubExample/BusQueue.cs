@@ -22,7 +22,7 @@ namespace ServiceBusSample
                 new QueueClient(ServiceBusConnectionString, QueueName, ReceiveMode.PeekLock); // Default Peek Lock
 
             // Send messages.
-            // await SendMessagesAsync(numberOfMessages);
+             await SendMessagesAsync(numberOfMessages);
 
             RegisterOnMessageHandlerAndReceiveMessages();
 

@@ -12,8 +12,8 @@ namespace ServiceBusSample
         private const string ServiceBusConnectionString =
             "Endpoint=sb://busexample1.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=LIdsRM4kAfDsj1Bu6RmOonkW5kJrfGYv0g9dwL1NCEo=";
 
-        private const string TopicName = "topicsample";
-        private const string SubscriptionName = "subcription1";
+        private const string TopicName = "topic1";
+        private const string SubscriptionName = "sub1";
 
         private static ITopicClient topicClient;
         private static ISubscriptionClient subscriptionClient;
@@ -33,7 +33,6 @@ namespace ServiceBusSample
         private async Task RegisterOnMessageHandlerAndReceiveMessages()
         {
             var client = new ManagementClient(ServiceBusConnectionString);
-
             if (!await client.SubscriptionExistsAsync(TopicName, SubscriptionName))
             {
                 await client.CreateSubscriptionAsync(TopicName, SubscriptionName);
