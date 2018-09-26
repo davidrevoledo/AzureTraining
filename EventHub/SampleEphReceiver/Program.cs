@@ -20,9 +20,16 @@ namespace SampleEphReceiver
         public static void Main(string[] args)
         {
             MainAsync(args).GetAwaiter().GetResult();
+
+            Console.ReadLine();
         }
 
         private static async Task MainAsync(string[] args)
+        {
+            await HostProcessor();
+        }
+
+        private static async Task HostProcessor()
         {
             Console.WriteLine("Registering EventProcessor...");
 
@@ -32,10 +39,22 @@ namespace SampleEphReceiver
                 StorageConnectionString,
                 StorageContainerName);
 
+
             // Registers the Event Processor Host and starts receiving messages
             await eventProcessorHost.RegisterEventProcessorAsync<SimpleEventProcessor>();
 
-            Console.WriteLine("Receiving. Press enter key to stop worker.");
+            //  MaxBatchSize - this is the maximum size of the collection the user wants to receive in
+            // an invocation of ProcessEventsAsync. Note that this is not the minimum, only the maximum.
+            // If there are not this many messages to be received the ProcessEventsAsync will execute with as many as were available.
+
+            //  PrefetchCount - this is a value used by the underlying AMQP channel to determine
+            //   the upper limit of how many messages the client should receive.This value should be greater than or equal to MaxBatchSize.
+
+            //  InvokeProcessorAfterReceiveTimeout - setting this parameter to true will result in ProcessEventsAsync
+            //   being called when the underlying call the receive events on a partition times out. This is useful for taking time based actions during periods of inactivity on the partition.
+
+
+            //Console.WriteLine("Receiving. Press enter key to stop worker.");
             Console.ReadLine();
 
             // Disposes of the Event Processor Host
