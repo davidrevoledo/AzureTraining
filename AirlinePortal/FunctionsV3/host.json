@@ -1,9 +1,0 @@
-{
-  "functions": [
-    "InvoiceProcessingTrigger",
-    "InvoiceProcessing",
-    "GenerateInvoice",
-    "StockMovement",
-    "PrepareLogisticDelivery"
-  ]
-}
