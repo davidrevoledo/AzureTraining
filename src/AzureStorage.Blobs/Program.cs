@@ -31,18 +31,17 @@ namespace AzureStorage.Blobs
         {
             var containerName = "images";
 
-            CloudStorageAccount cloudStorageAccount 
-                = new CloudStorageAccount(new StorageCredentials(StorageConnection), true);
-
-            CloudBlobClient cloudBlobClient 
+            var cloudStorageAccount = CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=12345azurestorage;AccountKey=p5QJUvojzpmLYYJZeKH1u4pFuT6SAIOuvENnZWK/Fbyinrvgzou1uEqx5+PF2UTQOBtDfg48c9GdLtA9y8z6nA==;EndpointSuffix=core.windows.net");
+            CloudBlobClient cloudBlobClient
                 = cloudStorageAccount.CreateCloudBlobClient();
 
-            CloudBlobContainer cloudBlobContainer 
+            CloudBlobContainer cloudBlobContainer
                 = cloudBlobClient.GetContainerReference(containerName);
+
+            await cloudBlobContainer.CreateIfNotExistsAsync();
 
             CloudBlockBlob blockBlob =
                 cloudBlobContainer.GetBlockBlobReference("uploadedfilename.png");
-
 
             MemoryStream memStream = new MemoryStream();
 
@@ -53,14 +52,7 @@ namespace AzureStorage.Blobs
 
         private static async Task UploadFile()
         {
-
-            const string cs =
-                "DefaultEndpointsProtocol=https;AccountName=storage12345david;AccountKey=Hug7WhDLbYl1dojX4OABsxteoAIjtMsi9B92W2QBIFuM+iQsZsuKrzedQC04vSFDx3WcTVB/oMFOvexTA9lwig==;EndpointSuffix=core.windows.net";
-
-            var credentials = new StorageCredentials("storage12345david",
-                @"Hug7WhDLbYl1dojX4OABsxteoAIjtMsi9B92W2QBIFuM+iQsZsuKrzedQC04vSFDx3WcTVB/oMFOvexTA9lwig==");
-
-            var cloudStorageAccount = new CloudStorageAccount(credentials, true);
+            var cloudStorageAccount = CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=12345azurestorage;AccountKey=p5QJUvojzpmLYYJZeKH1u4pFuT6SAIOuvENnZWK/Fbyinrvgzou1uEqx5+PF2UTQOBtDfg48c9GdLtA9y8z6nA==;EndpointSuffix=core.windows.net");
 
             //create a block blob
             CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
