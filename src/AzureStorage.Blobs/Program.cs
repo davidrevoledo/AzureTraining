@@ -22,14 +22,14 @@ namespace AzureStorage.Blobs
 
         private static async Task MainAsync()
         {
-            await UploadFile();
+            //await UploadFile();
 
-            //await ReadFile();
+            await ReadFile();
         }
 
         private static async Task ReadFile()
         {
-            var containerName = "images";
+            var containerName = "images2";
 
             var cloudStorageAccount = CloudStorageAccount.Parse(@"DefaultEndpointsProtocol=https;AccountName=12345azurestorage;AccountKey=p5QJUvojzpmLYYJZeKH1u4pFuT6SAIOuvENnZWK/Fbyinrvgzou1uEqx5+PF2UTQOBtDfg48c9GdLtA9y8z6nA==;EndpointSuffix=core.windows.net");
             CloudBlobClient cloudBlobClient
@@ -41,13 +41,14 @@ namespace AzureStorage.Blobs
             await cloudBlobContainer.CreateIfNotExistsAsync();
 
             CloudBlockBlob blockBlob =
-                cloudBlobContainer.GetBlockBlobReference("uploadedfilename.png");
+                cloudBlobContainer.GetBlockBlobReference("37cae288-82a5-4155-a68c-5bc637a0c3ebimage.png");
 
-            MemoryStream memStream = new MemoryStream();
+            await blockBlob.FetchAttributesAsync();
 
-            await blockBlob.DownloadToStreamAsync(memStream);
-
-            Console.WriteLine(memStream.Length);
+            foreach (var data in blockBlob.Metadata)
+            {
+                Console.WriteLine($"key {data.Key} value :{data.Value}");
+            }
         }
 
         private static async Task UploadFile()

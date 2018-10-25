@@ -8,7 +8,8 @@ namespace AzureStorageQueue
     internal class Program
     {
         // Parse the connection string and return a reference to the storage account.
-        private static readonly CloudStorageAccount storageAccount = CloudStorageAccount.Parse("");
+        private static readonly CloudStorageAccount storageAccount 
+            = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=storageaccount1234david;AccountKey=KXu5bWOiCTh7d/PWluFOgDjjoJZHrrL2lLQXiGAT1vAHKsVx/sl/B31vJpXmA+N2PnqCmX9cCVvtxn0pBTVdlw==;EndpointSuffix=core.windows.net");
         private static void Main(string[] args)
         {
             MainAsync()
@@ -20,13 +21,13 @@ namespace AzureStorageQueue
 
         private static async Task MainAsync()
         {
-            await PushMessage();
+            //await PushMessage();
 
-            await RaedMessage();
+            //await RaedMessage();
 
             await ChangeMessageContent();
 
-            await GetBatchMessages();
+            //await GetBatchMessages();
         }
 
         private static async Task GetBatchMessages()
@@ -64,18 +65,14 @@ namespace AzureStorageQueue
         private static async Task RaedMessage()
         {
             var queueClient = storageAccount.CreateCloudQueueClient();
-
             var queue = queueClient.GetQueueReference("myqueue");
 
             // Create the queue if it doesn't already exist
             await queue.CreateIfNotExistsAsync();
 
-            var messaage = await queue.PeekMessageAsync();
+            var message = await queue.GetMessageAsync();
 
-            var message2 = await queue.GetMessageAsync();
-
-
-            await queue.DeleteMessageAsync(messaage);
+            await queue.DeleteMessageAsync(message);
         }
 
         private static async Task PushMessage()
