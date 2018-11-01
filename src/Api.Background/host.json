@@ -1,0 +1,6 @@
+{
+  "queues": {
+    "maxDequeueCount": 5,
+    "batchSize": 20
+  }
+}

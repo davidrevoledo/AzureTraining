@@ -17,25 +17,34 @@ namespace AzureStorage.Tables
             MainAsync()
                 .GetAwaiter()
                 .GetResult();
+
+            Console.ReadLine();
         }
 
         private static async Task MainAsync()
         {
-            await CreateTable();
+            //await CreateTable();
 
-            await InsertEntities();
+            //List<Task> tasks = new List<Task>();
 
-            await ExecuteBatch();
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    tasks.Add(InsertEntities());
+            //}
+
+            //await Task.WhenAll(tasks);
+
+            //await ExecuteBatch();
 
             await GetEntities();
 
-            await GetEntity();
+            //await GetEntity();
 
-            await ReplaceEntity();
+            //await ReplaceEntity();
 
-            await InsertOrReplace();
+            //await InsertOrReplace();
 
-            await DeleteTable();
+            // await DeleteTable();
         }
 
         private static async Task DeleteTable()
@@ -88,6 +97,9 @@ namespace AzureStorage.Tables
             {
                 var student = (Student)retrievedResult.Result;
 
+                Console.WriteLine($"Name : {student.Name}");
+
+
                 student.Name = "Paul";
 
                 // Create the Replace TableOperation.
@@ -107,7 +119,7 @@ namespace AzureStorage.Tables
             CloudTable table = tableClient.GetTableReference("students");
 
             // Create a retrieve operation that takes a entity.
-            TableOperation retrieveOperation = TableOperation.Retrieve<Student>("Sistemas", "35003399");
+            TableOperation retrieveOperation = TableOperation.Retrieve<Student>("Sistemas", "dsadasdas");
 
             // Execute the retrieve operation.
             TableResult retrievedResult = await table.ExecuteAsync(retrieveOperation);
@@ -134,11 +146,15 @@ namespace AzureStorage.Tables
             TableQuery<Student> query = new TableQuery<Student>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "Sistemas"));
 
+
+            int i = 1;
+
             await ExecuteQueryAsync(table, query, CancellationToken.None, list =>
             {
                 foreach (var student in list)
                 {
-                    Console.WriteLine($"{student.Name} {student.Surname} {student.Country}");
+                    i++;
+                    Console.WriteLine($"{student.Name} {student.Surname} {student.Country} number : {i}");
                 }
             });
         }
@@ -185,7 +201,7 @@ namespace AzureStorage.Tables
                 Name = "David",
                 Surname = "Revoledo",
                 Country = "Argentina",
-                RowKey = "35449981",
+                RowKey = "35449987",
                 PartitionKey = "Sistemas"
             };
 
@@ -200,7 +216,7 @@ namespace AzureStorage.Tables
 
             TableBatchOperation batchOperation = new TableBatchOperation();
             batchOperation.Insert(student);
-            batchOperation.Insert(student2);
+            batchOperation.Delete(student2);
 
             // Execute the batch operation.
             await table.ExecuteBatchAsync(batchOperation);
@@ -219,7 +235,7 @@ namespace AzureStorage.Tables
                 Name = "David",
                 Surname = "Revoledo",
                 Country = "Argentina",
-                RowKey = "35449981",
+                RowKey = Guid.NewGuid().ToString(),
                 PartitionKey = "Sistemas"
             };
 

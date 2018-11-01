@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         private async Task GenerateInvoiceRequest()
         {
             CloudStorageAccount storageAccount
-               = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=storageaccount1234david;AccountKey=KXu5bWOiCTh7d/PWluFOgDjjoJZHrrL2lLQXiGAT1vAHKsVx/sl/B31vJpXmA+N2PnqCmX9cCVvtxn0pBTVdlw==;EndpointSuffix=core.windows.net");
+               = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=appserviceplan19c26;AccountKey=0/J5uQ1aDoMC3gpCmi22rDSO5Lkqz2QMYu3OQYYzunlUnMP8KCKVKiRCyHnlPLYuy2C/ADQTGzfHFkhs8U9Nnw==;EndpointSuffix=core.windows.net");
 
             var queueClient = storageAccount.CreateCloudQueueClient();
 

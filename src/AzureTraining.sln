@@ -9,7 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebAppli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureStorageQueue", "AzureStorageQueue\AzureStorageQueue.csproj", "{AF38EDBE-2A62-4E57-A251-257FF2C8ECC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureStorage.Tables", "AzureStorage.Tables\AzureStorage.Tables.csproj", "{E9653451-937B-4594-B8C9-751936CF76D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureStorage.Tables", "AzureStorage.Tables\AzureStorage.Tables.csproj", "{E9653451-937B-4594-B8C9-751936CF76D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Durable.Functions", "Durable.Functions\Durable.Functions.csproj", "{A690D246-B715-4AD1-9A0F-1E3AD1D76612}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebJob1", "WebJob1\WebJob1.csproj", "{63EFC92B-05BC-412A-9AC2-40E845C06B55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Background", "Api.Background\Api.Background.csproj", "{2774F347-3CC6-405B-8337-0E1FFB44DE23}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{EB974C21-369C-4BF4-87CF-AE5F6D195534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions.Http", "Functions.Http\Functions.Http.csproj", "{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +43,29 @@ Global
 		{E9653451-937B-4594-B8C9-751936CF76D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9653451-937B-4594-B8C9-751936CF76D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9653451-937B-4594-B8C9-751936CF76D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A690D246-B715-4AD1-9A0F-1E3AD1D76612}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A690D246-B715-4AD1-9A0F-1E3AD1D76612}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A690D246-B715-4AD1-9A0F-1E3AD1D76612}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A690D246-B715-4AD1-9A0F-1E3AD1D76612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63EFC92B-05BC-412A-9AC2-40E845C06B55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EFC92B-05BC-412A-9AC2-40E845C06B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EFC92B-05BC-412A-9AC2-40E845C06B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EFC92B-05BC-412A-9AC2-40E845C06B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2774F347-3CC6-405B-8337-0E1FFB44DE23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2774F347-3CC6-405B-8337-0E1FFB44DE23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2774F347-3CC6-405B-8337-0E1FFB44DE23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2774F347-3CC6-405B-8337-0E1FFB44DE23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2774F347-3CC6-405B-8337-0E1FFB44DE23} = {EB974C21-369C-4BF4-87CF-AE5F6D195534}
+		{9BA6DE1C-E8D9-4BF9-8F9F-B962DA528EBE} = {EB974C21-369C-4BF4-87CF-AE5F6D195534}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {959EE33D-E7A5-432B-8CF0-268185060CE0}
